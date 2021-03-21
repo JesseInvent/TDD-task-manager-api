@@ -6,11 +6,12 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 use Tests\Helpers\Assertions;
 use Tests\Helpers\TestsData;
 use Tests\UserActions;
 
-class attemptUserSignupTest extends TestCase
+class SignupTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -42,17 +43,20 @@ class attemptUserSignupTest extends TestCase
         $response = $this->attemptUserSignup();
 
         // Asserts
-        $this->AssertThatResponseIsJSON($response);
 
-        $this->AssertThatModelWasCreated($userModel);
+        $this->assertEquals(Response::HTTP_OK, $response->status());
+
+        $this->AssertThat_Response_IsJSON($response);
+
+        $this->AssertThat_Model_WasCreated($userModel);
 
         $this->AssertThatPasswordIsHashed($data->user()['password']);
 
         $this->AssertThatEmailMatches($data->user()['email']);
 
-        $this->AssertThatTokenWasReturned($response->getData());
+        $this->Assert_That_Token_Was_Returned($response->getData());
         
-        $this->AssertThatUserIsLoggedIn();
+        $this->AssertThat_User_IsLoggedIn();
 
     }
 
@@ -67,9 +71,10 @@ class attemptUserSignupTest extends TestCase
 
         // Act
         $response = $this->attemptInvalidUserSignup();
-
+        // dd($response);
         // Asserts
-        $this->AssertThatNoModelWasCreated($userModel);
+        $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->status());
+        $this->Assert_That_No_Model_Was_Created($userModel);
 
     }   
 

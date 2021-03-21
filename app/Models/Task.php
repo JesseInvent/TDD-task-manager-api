@@ -9,8 +9,21 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['body', 'user_id'];
+
+    public function completed ()
+    {
+      // '!!' indicates to return Boolean base on result
+       return !!$this->completedTask()->where('task_id', $this->id)->count();
+    }
+
     public function user()
     {
-        $this->belongsTo(User::class);
+      return $this->belongsTo(User::class);
+    }
+
+    public function completedTask()
+    {
+      return $this->hasOne(CompletedTask::class);
     }
 }

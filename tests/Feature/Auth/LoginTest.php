@@ -6,10 +6,9 @@ use Tests\TestCase;
 use Tests\UserActions;
 use Tests\Helpers\TestsData;
 use Tests\Helpers\Assertions;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Symfony\Component\HttpFoundation\Response;
 
 class LoginTest extends TestCase
 {
@@ -32,9 +31,10 @@ class LoginTest extends TestCase
          $response = $this->attemptUserLogin();
 
          // Assert
-        $this->AssertThatResponseIsJSON($response);
-        $this->AssertThatTokenWasReturned($response->getData());
-        $this->AssertThatUserIsLoggedIn();
+        $this->assertEquals(Response::HTTP_OK, $response->status());
+        $this->AssertThat_Response_IsJSON($response);
+        $this->Assert_That_Token_Was_Returned($response->getData());
+        $this->AssertThat_User_IsLoggedIn();
    }
 
 
@@ -49,7 +49,8 @@ class LoginTest extends TestCase
         $response = $this->attemptUserLogout();
 
         // Asserts
-       $this->AssertThatUserIsNotLoggedIn();
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->status());
+       $this->Assert_That_User_IsNot_LoggedIn();
    }
 
 
@@ -65,7 +66,8 @@ class LoginTest extends TestCase
        $response = $this->attemptWrongUserLogin();
 
        // Assert
-       $this->AssertThatUserIsNotLoggedIn();
+       $this->assertEquals(Response::HTTP_UNAUTHORIZED, $response->status());
+       $this->Assert_That_User_IsNot_LoggedIn();
        $this->assertEquals($response->getData()->error, 'Unauthorized');
     }
 }

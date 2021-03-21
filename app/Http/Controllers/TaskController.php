@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskRequest;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class TaskController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
@@ -14,7 +17,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+        return auth()->user()->tasks();
     }
 
     /**
@@ -33,11 +36,12 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaskRequest $request)
     {
-        $task = Task::create($request->all());
 
-        return true;
+        $task = auth()->user()->tasks()->create(request()->all());
+        // $task = Task::create(request()->all());
+        return response()->json($task, Response::HTTP_CREATED);
     }
 
     /**
@@ -48,7 +52,9 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        // return response($task, Response::HTTP_OK);
+
+        return $task;
     }
 
     /**
@@ -69,9 +75,36 @@ class TaskController extends Controller
      * @param  \App\Models\Task  $task
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Task $task)
+    public function update(TaskRequest $request, Task $task)
     {
-        //
+       $updatedTask = auth()->user()->tasks()->update(request()->all());
+       return response()->json($updatedTask, Response::HTTP_ACCEPTED);
+    }
+
+    /**
+     * Mark a task as completed
+     */
+    public function markAsCompleted(Task $task)
+    {
+        if (!$task->completed()) {
+            $task->completedTask()->create([
+                'user_id' => auth()->user()->id
+            ]);
+            return response()->json(['Task marked as completed'], Response::HTTP_CREATED);
+        }
+
+        return response()->json(['Task already marked as completed'], Response::HTTP_UNPROCESSABLE_ENTITY);
+      
+    }
+
+
+    /**
+     * Mark a task as uncompleted
+     */
+    public function markAsUnCompleted(Task $task)
+    {
+       $task->completedTask()->where('task_id', $task->id)->delete();
+       return response()->json(['Task marked as Uncompleted'], Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -82,6 +115,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+        $task->delete();
+
+        return response('deleted', Response::HTTP_NO_CONTENT);
     }
 }

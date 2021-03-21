@@ -51,6 +51,9 @@ Route::group (
         Route::get('/task/{task}', [TaskController::class, 'show']);
         Route::patch('/task/{task}', [TaskController::class, 'update']);
         Route::delete('/task/{task}', [TaskController::class, 'destroy']);
+        Route::post('/task/{task}/completed', [TaskController::class, 'markAsCompleted']);
+        Route::delete('/task/{task}/completed', [TaskController::class, 'markAsUnCompleted']);
+
 
     }
 
