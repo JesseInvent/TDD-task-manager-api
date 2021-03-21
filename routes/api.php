@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +16,43 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::group(
+
+    [
+        'prefix' => 'auth'
+    ],
+
+    function ($router) {
+
+        Route::get('me', [AuthController::class, 'me']);
+        Route::post('login', [AuthController::class, 'login']);
+        Route::post('signup', [AuthController::class, 'signup']);
+        Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::post('logout', [AuthController::class, 'logout']);
+        
+    }
+);
+
+Route::group (
+
+    [
+        'middleware' => 'auth:api',
+    ], 
+    
+    function ($router) {
+
+        // Route::apiResource('task', TaskController::class);
+        Route::get('/task', [TaskController::class, 'index']);
+        Route::post('/task', [TaskController::class, 'store']);
+        Route::get('/task/{task}', [TaskController::class, 'show']);
+        Route::patch('/task/{task}', [TaskController::class, 'update']);
+        Route::delete('/task/{task}', [TaskController::class, 'destroy']);
+
+    }
+
+);
+
