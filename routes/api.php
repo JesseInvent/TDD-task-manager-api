@@ -55,7 +55,6 @@ Route::group (
         Route::post('/task/{task}/completed', [TaskController::class, 'markAsCompleted']);
         Route::delete('/task/{task}/completed', [TaskController::class, 'markAsUnCompleted']);
 
-
     }
 
 );

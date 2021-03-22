@@ -24,8 +24,6 @@ class TasksTest extends TestCase
     public function user_can_create_a_task_a_valid_token ()
     {
 
-        // $this->withoutExceptionHandling();
-
         // Arrange
         $data = new TestsData();
         $taskModel = new Task();
@@ -187,13 +185,11 @@ class TasksTest extends TestCase
         // Asserts
         $this->assertEquals(Response::HTTP_UNPROCESSABLE_ENTITY, $response->status());
         $this->AssertThat_Model_WasCreated($completedTaskModel);
-        
     }
 
     /** @test */
     public function user_can_get_all_completed_tasks()
     {
-        $this->withoutExceptionHandling();
         // Arrange
         $completedTaskModel = new CompletedTask();
         $authResponse = $this->Mock_User_SigningUp_And_LoggingIn_Action_With_Token_Returned();
@@ -207,5 +203,31 @@ class TasksTest extends TestCase
         // Asserts
         $this->assertEquals(Response::HTTP_OK, $response->status());
         $this->assertNotNull($response->getData()); 
+        $this->assertNotNull($response->getData()[0]->body); 
+
     }
+
+      /** @test */
+      public function user_can_get_all_created_tasks()
+      {
+          $this->withoutExceptionHandling();
+          // Arrange
+          $authResponse = $this->Mock_User_SigningUp_And_LoggingIn_Action_With_Token_Returned();
+          $token = $authResponse->getData()->access_token;
+          
+          // Act
+          $this->attemptToCreateTask($token);
+          $this->attemptToCreateTask($token);
+          $this->attemptTo_Mark_Task_AsComplete($token);
+
+          $response = $this->attemptTo_Get_Tasks($token);
+
+        //   dd($response->getData());
+  
+          // Asserts
+          $this->assertEquals(Response::HTTP_OK, $response->status());
+          $this->assertNotNull($response->getData()); 
+          $this->assertNotNull($response->getData()[0]->body); 
+
+      }
 }

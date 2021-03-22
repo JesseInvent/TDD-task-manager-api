@@ -119,7 +119,16 @@ trait UserActions {
                         ])
                     ->get('/api/task/'.Task::first()->id.'/completed');
     }
+    
 
+    public function attemptTo_Get_Tasks($token)
+    {
+        return $this->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer '.$token
+        ])
+        ->get('/api/task');
+    }
 
 
     public function Mock_User_SigningUp_And_LoggingIn_Action_With_Token_Returned()

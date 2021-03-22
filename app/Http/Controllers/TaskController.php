@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return auth()->user()->tasks();
+       return response()->json(TaskResource::collection(auth()->user()->tasks()->get()->all()), Response::HTTP_OK);
     }
 
 
@@ -43,7 +44,7 @@ class TaskController extends Controller
 
         $task = auth()->user()->tasks()->create(request()->all());
         // $task = Task::create(request()->all());
-        return response()->json($task, Response::HTTP_CREATED);
+        return response()->json(new TaskResource($task), Response::HTTP_CREATED);
     }
 
 
@@ -109,7 +110,7 @@ class TaskController extends Controller
             $task->completedTask()->create([
                 'user_id' => auth()->user()->id
             ]);
-            return response()->json(['Task marked as completed'], Response::HTTP_CREATED);
+            return response()->json(new TaskResource($task), Response::HTTP_CREATED);
         }
 
         return response()->json(['Task already marked as completed'], Response::HTTP_UNPROCESSABLE_ENTITY);
@@ -123,8 +124,9 @@ class TaskController extends Controller
     public function markAsUnCompleted(Task $task)
     {
        $task->completedTask()->where('task_id', $task->id)->delete();
-       return response()->json(['Task marked as Uncompleted'], Response::HTTP_NO_CONTENT);
+       return response()->json('success', Response::HTTP_NO_CONTENT);
     }
+
 
     /**
      * Remove the specified resource from storage.
