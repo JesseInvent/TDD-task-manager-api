@@ -20,6 +20,7 @@ class TaskController extends Controller
         return auth()->user()->tasks();
     }
 
+
     /**
      * Show the form for creating a new resource.
      *
@@ -30,11 +31,12 @@ class TaskController extends Controller
         //
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Responsedxf
      */
     public function store(TaskRequest $request)
     {
@@ -44,6 +46,7 @@ class TaskController extends Controller
         return response()->json($task, Response::HTTP_CREATED);
     }
 
+
     /**
      * Display the specified resource.
      *
@@ -52,10 +55,9 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        // return response($task, Response::HTTP_OK);
-
-        return $task;
+        return response()->json($task, Response::HTTP_OK);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -68,6 +70,7 @@ class TaskController extends Controller
         //
     }
 
+
     /**
      * Update the specified resource in storage.
      *
@@ -77,15 +80,31 @@ class TaskController extends Controller
      */
     public function update(TaskRequest $request, Task $task)
     {
-       $updatedTask = auth()->user()->tasks()->update(request()->all());
+       $updatedTask = $task->update(request()->all());
        return response()->json($updatedTask, Response::HTTP_ACCEPTED);
     }
+
+
+    /**
+     * Get User completed Tasks
+     */
+    public function getUserCompletedTasks()
+    {
+        $userTasks = auth()->user()->tasks()->get();
+        $completedTasks = array_filter($userTasks->all(), function($task) {
+           return $task->completed();
+       });
+
+       return response()->json($completedTasks, Response::HTTP_OK);
+    }
+
 
     /**
      * Mark a task as completed
      */
     public function markAsCompleted(Task $task)
     {
+        // !! indicates a boolean operation
         if (!$task->completed()) {
             $task->completedTask()->create([
                 'user_id' => auth()->user()->id

@@ -190,5 +190,22 @@ class TasksTest extends TestCase
         
     }
 
-    // task can be deleted
+    /** @test */
+    public function user_can_get_all_completed_tasks()
+    {
+        $this->withoutExceptionHandling();
+        // Arrange
+        $completedTaskModel = new CompletedTask();
+        $authResponse = $this->Mock_User_SigningUp_And_LoggingIn_Action_With_Token_Returned();
+        $token = $authResponse->getData()->access_token;
+        
+        // Act
+        $this->attemptToCreateTask($token);
+        $this->attemptTo_Mark_Task_AsComplete($token);
+        $response = $this->attemptTo_Get_completed_Tasks($token);
+
+        // Asserts
+        $this->assertEquals(Response::HTTP_OK, $response->status());
+        $this->assertNotNull($response->getData()); 
+    }
 }
