@@ -46,14 +46,14 @@ Route::group (
     function ($router) {
 
         // Route::apiResource('task', TaskController::class);
-        Route::get('/task', [TaskController::class, 'index']);
-        Route::post('/task', [TaskController::class, 'store']);
-        Route::get('/task/{task}', [TaskController::class, 'show']);
-        Route::patch('/task/{task}', [TaskController::class, 'update']);
-        Route::delete('/task/{task}', [TaskController::class, 'destroy']);
-        Route::get('/task/{task}/completed', [TaskController::class, 'getUserCompletedTasks']);
-        Route::post('/task/{task}/completed', [TaskController::class, 'markAsCompleted']);
-        Route::delete('/task/{task}/completed', [TaskController::class, 'markAsUnCompleted']);
+        Route::get('/tasks', [TaskController::class, 'index']);
+        Route::post('/tasks', [TaskController::class, 'store']);
+        Route::get('/tasks/{task}', [TaskController::class, 'show']);
+        Route::patch('/tasks/{task}', [TaskController::class, 'update']);
+        Route::delete('/tasks/{task}', [TaskController::class, 'destroy']);
+        Route::get('/tasks/{task}/completed', [TaskController::class, 'getUserCompletedTasks']);
+        Route::post('/tasks/{task}/completed', [TaskController::class, 'markAsCompleted']);
+        Route::delete('/tasks/{task}/completed', [TaskController::class, 'markAsUnCompleted']);
 
     }
 
