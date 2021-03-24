@@ -6,6 +6,9 @@ use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class Handler extends ExceptionHandler
 {
@@ -37,9 +40,19 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable(function (Throwable $e) {
+
             if ($e instanceof JWTException) {
                 return response()->json(['Token not provided'], Response::HTTP_BAD_REQUEST);
             }
+
+            if ($e instanceof NotFoundHttpException) {
+                return response()->json(['Model not found'], Response::HTTP_NOT_FOUND);
+            }
+
+            if ($e instanceof MethodNotAllowedHttpException || $e instanceof MethodNotAllowedException) {
+                return response()->json(['Method not allowed for the specified route or route doesn\'t exist'], Response::HTTP_NOT_FOUND);
+            }
+
         });
     }
 }

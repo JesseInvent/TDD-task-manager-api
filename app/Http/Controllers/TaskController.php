@@ -56,7 +56,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        return response()->json($task, Response::HTTP_OK);
+        return response()->json(new TaskResource($task), Response::HTTP_OK);
     }
 
 
