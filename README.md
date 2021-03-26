@@ -1,62 +1,336 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Task Manager API
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+### - Clone Repository 
+```bash
+$ git clone https://github.com/jesseinvent/TDD-task-manager-api 
+```
+### - Create a .env file
+```bash 
+$ touch .env 
+```
 
-## About Laravel
+### Copy all entries from .env.example to .env
+```bash
+$ cp .env.example .env
+```
+### - Set your prefer Database connection, username and password credentials in .env file
+### - Create the following databases: taskApi and taskApi_test(for testing)
+### - After successfully Database creation and setup, run all migration files
+```bash
+$ php artisan migrate 
+```
+### Startup the API
+```bash
+$ php artisan serve
+```
+## - Run all Test Suites
+```bash
+php artisan test
+```
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## - Startup Postman
+## - Make request to Base URL
+* GET http://127.0.0.1:8000
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Response: 
+```javascript
+[ Welcome to Task Manager API ]
+```
 
-## Learning Laravel
+## ROUTES
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* **User Signup**
+<br> <br>
+Request:  `POST /api/auth/signup` <br>
+Authentication: `none`<br>
+Query Parameters: `none` <br>
+```
+Headers: 
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Accept: application/json
+Content-type: application/json
+``` 
 
-## Laravel Sponsors
+Body Format: 
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```
+{ 
+    name: John Doe,
+    email: johndoe@gmail.com, 
+    password: password,
+    password_confirmation: password
+}
+```
 
-### Premium Partners
+Response Format: 
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
+```
+{
+    "access_token": "eyJ0eXAiOiJKV1LCJhbGciOiJIUzI1NiJ9.yJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9zaWdudXAiLCJpYXQiOjE2MTY2OTA4",
+    "token_type": "Bearer",
+    "user": "John Doe",
+    "expires_in": 3600
+}
+```
+Success Status Code: 201 (created)
 
-## Contributing
+<br><br>
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+* **User Login**
+<br> <br>
+Request:  `POST /api/auth/login` <br>
+Authentication: `none`<br>
+Query Parameters: `none` <br>
+```
+Headers: 
 
-## Code of Conduct
+Accept: application/json
+Content-type: application/json
+``` 
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Body Format: 
 
-## Security Vulnerabilities
+```
+{ 
+    email: johndoe@gmail.com, 
+    password: password,
+}
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Response Format: 
 
-## License
+```
+{
+    "access_token": "eyJ0eXAiOiJKV1LCJhbGciOiJIUzI1NiJ9.yJpc3MiOiJodHRwOlwvXC8xMjcuMC4wLjE6ODAwMFwvYXBpXC9hdXRoXC9zaWdudXAiLCJpYXQiOjE2MTY2OTA4",
+    "token_type": "Bearer",
+    "user": "John Doe",
+    "expires_in": 3600
+}
+```
+Success Status Code: 200 (OK)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+<br><br>
+
+* **Creating a Task**
+<br> <br>
+Request:  `POST /api/tasks` <br>
+Authentication: `none`<br>
+Query Parameters: `none` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: 
+
+```
+{ 
+    body: Task One, 
+}
+```
+
+Response Format: 
+
+```
+{
+    "id": 1,
+    "body": "Task One",
+    "completed": false,
+    "completed_at": "Task not completed",
+    "created_at": "1 second ago"
+}
+```
+Success Status Code: 201 (Created)
+
+
+<br><br>
+
+* **Get Task**
+<br> <br>
+Request:  `GET /api/tasks/:id` <br>
+Authentication: `Bearer Token`<br>
+Query Parameters: `id: task id` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: 
+
+```
+{ 
+    body: Task One, 
+}
+```
+
+Response Format: 
+
+```
+{
+    "id": 7,
+    "body": "Optio voluptate autem voluptas.",
+    "completed": false,
+    "completed_at": "Task not completed",
+    "created_at": "8 minutes ago"
+}
+```
+Success Status Code: 200 (OK)
+
+
+<br><br>
+
+* **Get User Tasks**
+<br> <br>
+Request:  `GET /api/tasks` <br>
+Authentication: `Bearer Token`<br>
+Query Parameters: `none` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: 
+
+```
+{ 
+    body: Task One, 
+}
+```
+
+Response Format: 
+
+```
+[    {
+        "id": 1,
+        "body": "Task One",
+        "completed": false,
+        "completed_at": "Task not completed",
+        "created_at": "6 min ago"
+    },
+    {
+        "id": 2,
+        "body": "Task Two",
+        "completed": false,
+        "completed_at": "Task not completed",
+        "created_at": "8 mins ago"
+    },
+]
+```
+Success Status Code: 200 (OK)
+
+
+<br><br>
+
+* **Update a task**
+<br> <br>
+Request:  `PATCH /api/tasks/:id` <br>
+Authentication: `Bearer Token`<br>
+Query Parameters: `id: task id` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: 
+
+```
+{ 
+    body: Updated Task, 
+}
+```
+
+Response Format: 
+
+```
+{
+    "id": 1,
+    "body": "Task One",
+    "completed": false,
+    "completed_at": "Task not completed",
+    "created_at": "1 second ago"
+}
+```
+Success Status Code: 202 (Accepted)
+
+
+<br><br>
+
+* **Mark a task as completed**
+<br><br>
+Request:  `POST /api/tasks/:id/completed` <br>
+Authentication: `Bearer Token`<br>
+Query Parameters: `id: task id` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: `none`
+
+Response Format: 
+
+```
+{
+    "id": 4,
+    "body": "Updated Task",
+    "completed": true,
+    "completed_at": "1 second ago",
+    "created_at": "1 day ago"
+}
+```
+Success Status Code: 201 (Created)
+
+
+<br><br>
+
+* **Mark a completed task as uncompleted**
+<br><br>
+Request:  `DELETE /api/tasks/:id/completed` <br>
+Authentication: `Bearer Token`<br>
+Query Parameters: `id: completed task id` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: `none`
+
+Response Format: `none`
+
+Success Status Code: 204 (No content)
+
+
+<br><br>
+
+* **Delete a task**
+<br><br>
+Request:  `DELETE /api/tasks/:id` <br>
+Authentication: `Bearer Token`<br>
+Query Parameters: `id: completed task id` <br>
+```
+Headers: 
+
+Accept: application/json
+Content-type: application/json
+``` 
+
+Body Format: `none`
+
+Response Format: `none`
+```
+Success Status Code: 204 (No content)
+
+

@@ -18,7 +18,7 @@ class TaskController extends Controller
      */
     public function index()
     {
-       return response()->json(TaskResource::collection(auth()->user()->tasks()->get()->all()), Response::HTTP_OK);
+       return response()->json(TaskResource::collection(auth()->user()->tasks()->latest()->get()->all()), Response::HTTP_OK);
     }
 
 

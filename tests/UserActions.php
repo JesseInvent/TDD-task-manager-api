@@ -64,7 +64,7 @@ trait UserActions {
                             'Accept' => 'application/json',
                             'Authorization' => 'Bearer '.$token
                         ])
-                    ->post('/api/task', $data->task()
+                    ->post('/api/tasks', $data->task()
                 );
     }
 
@@ -75,7 +75,7 @@ trait UserActions {
                             'Accept' => 'application/json',
                             'Authorization' => 'Bearer '.$token
                         ])
-                    ->patch('/api/task/'.Task::first()->id, array_merge($data->task(), $newTask));
+                    ->patch('/api/tasks/'.Task::first()->id, array_merge($data->task(), $newTask));
     }
 
     public function attemptToDeleteTask($token)
@@ -85,7 +85,7 @@ trait UserActions {
                             'Accept' => 'application/json',
                             'Authorization' => 'Bearer '.$token
                         ])
-                    ->delete('/api/task/'.Task::first()->id);
+                    ->delete('/api/tasks/'.Task::first()->id);
     }
 
     public function attemptTo_Mark_Task_AsComplete($token)
@@ -95,7 +95,7 @@ trait UserActions {
                             'Accept' => 'application/json',
                             'Authorization' => 'Bearer '.$token
                         ])
-                    ->post('/api/task/'.Task::first()->id.'/completed', $data->task()
+                    ->post('/api/tasks/'.Task::first()->id.'/completed', $data->task()
                 );
     }
 
@@ -107,7 +107,7 @@ trait UserActions {
                             'Accept' => 'application/json',
                             'Authorization' => 'Bearer '.$token
                         ])
-                    ->delete('/api/task/'.Task::first()->id.'/completed', $data->task()
+                    ->delete('/api/tasks/'.Task::first()->id.'/completed', $data->task()
                 );
     }
 
@@ -117,7 +117,7 @@ trait UserActions {
                             'Accept' => 'application/json',
                             'Authorization' => 'Bearer '.$token
                         ])
-                    ->get('/api/task/'.Task::first()->id.'/completed');
+                    ->get('/api/tasks/'.Task::first()->id.'/completed');
     }
     
 
@@ -127,7 +127,7 @@ trait UserActions {
             'Accept' => 'application/json',
             'Authorization' => 'Bearer '.$token
         ])
-        ->get('/api/task');
+        ->get('/api/tasks');
     }
 
 
